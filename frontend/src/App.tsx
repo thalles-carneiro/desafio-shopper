@@ -1,10 +1,10 @@
-import shopperLogo from './assets/shopper.svg';
-import './App.css'
+import { Header } from './components';
+import './App.css';
 
 function App() {
   return (
     <>
-      
+      <Header />
     </>
   )
 }
