@@ -6,6 +6,7 @@ import Loading from "../loading/loading";
 
 function Main() {
   const [values, setValues] = useState<string[][]>([]);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -13,6 +14,8 @@ function Main() {
       <Form
         onSetValues={ setValues }
         onSetIsLoading={ setIsLoading }
+        isUpdating={ isUpdating }
+        onSetIsUpdating={ setIsUpdating }
       />
       {
         isLoading

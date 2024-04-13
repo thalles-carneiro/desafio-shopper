@@ -5,7 +5,7 @@ type TableProps = {
   values: string[][],
 };
 
-const columns = ['Código', 'Nome', 'Preço Atual', 'Novo Preço'];
+const columns = ['Código', 'Nome', 'Preço Atual', 'Novo Preço', 'Validação'];
 
 function Table({ values }: TableProps) {
   return (
@@ -27,6 +27,7 @@ function Table({ values }: TableProps) {
             <td>{ 'Nome do produto' }</td>
             <td>{ formatPrice('xx.xx') }</td>
             <td>{ formatPrice(newPrice) }</td>
+            <td>{ 'Tudo certo! ✅' }</td>
           </tr>
         ))}
       </tbody>
