@@ -5,9 +5,18 @@ import FormContainer from './styles';
 
 type FormProps = {
   onSetValues: (values: string[][]) => void,
+  onSetIsLoading: (loading: boolean) => void,
+  isUpdating: boolean,
+  onSetIsUpdating: (updating: boolean) => void,
 };
 
-function Form({ onSetValues }: FormProps) {
+function Form(props: FormProps) {
+  const {
+    onSetValues,
+    onSetIsLoading,
+    isUpdating,
+    onSetIsUpdating,
+  } = props;
   const [results, setResults] = useState<string[][] | undefined>();
   const { CSVReader } = useCSVReader();
 
@@ -16,15 +25,40 @@ function Form({ onSetValues }: FormProps) {
     setResults(tableCells);
   };
 
-  const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleOnSubmitValidate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (results) {
+      onSetIsLoading(true);
       onSetValues(results);
+      setTimeout(() => {
+        onSetIsLoading(false);
+        onSetIsUpdating(true);
+      }, 2000);
     }
   };
 
+  const handleOnSubmitUpdate = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onSetIsLoading(true);
+    onSetValues([]);
+    setResults(undefined);
+
+    setTimeout(() => {
+      onSetIsLoading(false);
+      onSetIsUpdating(false);
+      const acceptedFile = document.querySelector('.acceptedFile') as HTMLElement;
+      acceptedFile.textContent = '';
+    }, 2000);
+  };
+
   return (
-    <FormContainer onSubmit={ handleOnSubmit }>
+    <FormContainer
+      onSubmit={
+        isUpdating
+          ? handleOnSubmitUpdate
+          : handleOnSubmitValidate
+      }
+    >
       <CSVReader
         onUploadAccepted={ handleOnUploadAccepted }
         config={{ worker: true }}
@@ -50,7 +84,11 @@ function Form({ onSetValues }: FormProps) {
           )
         }
       </CSVReader>
-      <Button>Validar</Button>
+      <Button
+        update={ isUpdating }
+      >
+        { isUpdating ? 'Atualizar' : 'Validar' }
+      </Button>
     </FormContainer>
   );
 }

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const HeaderLogo = styled.header`
   background-color: var(--secondary-color);
-  height: 6rem;
+  height: 10%;
   width: 100vw;
 
   img#logo {
