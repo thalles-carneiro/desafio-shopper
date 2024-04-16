@@ -1,78 +1,85 @@
-import connection from '../models/connection';
 import ProductModel from '../models/product.model';
 import Product from '../interfaces/product.interface';
-import { BadRequestError, NotFoundError } from 'restify-errors';
+import CSVFileEntry from '../interfaces/csvFile.interface';
 
 class ProductService {
   model: ProductModel;
 
   constructor() {
-    this.model = new ProductModel(connection);
+    this.model = new ProductModel();
   }
 
-  validateProperties(product: Product): [boolean, string | null] {
-    const properties = ['code', 'name', 'cost_price', 'sales_price'];
+  async validateEntryFields(entry: CSVFileEntry): Promise<string[]> {
+    const errors: string[] = [];
 
-    for (let i = 0; i < properties.length; i += 1) {
-      if (!Object.prototype.hasOwnProperty.call(product, properties[i])) {
-        return [false, properties[i]];
-      }
+    if (!entry.code) {
+      errors.push('A entrada está sem o campo "product_code" preenchido.');
     }
 
-    return [true, null];
+    if (!entry.new_price) {
+      errors.push('A entrada está sem o campo "new_price" preenchido.');
+    }
+
+    return errors;
   }
 
-  validateValues(product: Product): [boolean, string | null] {
-    const entries = Object.entries(product);
+  async validateProductPrices(product: Product, newPrice: number): Promise<string[]> {
+    const errors: string[] = [];
 
-    for (let i = 0; i < entries.length; i += 1) {
-      const [property, value] = entries[i];
-
-      if (!value) {
-        return [false, property];
-      }
+    if (isNaN(newPrice) || newPrice <= 0) {
+      errors.push('O novo preço deve ser um valor numérico válido e maior que zero.');
     }
 
-    return [true, null];
+    if (newPrice <= Number(product.cost_price)) {
+      errors.push('O novo preço deve ser maior que o preço de custo do produto.');
+    }
+
+    const maxPriceIncrease = Number(product.sales_price) * 0.1;
+    const priceDifference = Math.abs(newPrice - Number(product.sales_price));
+    if (priceDifference > maxPriceIncrease) {
+      errors.push('O reajuste de preço não pode exceder 10% em relação ao preço atual.');
+    }
+
+    return errors;
   }
 
-  validationBook(product: Product): void | string {
-    let [valid, property] = this.validateProperties(product);
+  async validateProduct(entry: CSVFileEntry): Promise<Product|CSVFileEntry> {
+    const errors: string[] = [];
 
-    if (!valid) {
-      return `O campo ${property} é obrigatório.`;
+    errors.push(...await this.validateEntryFields(entry));
+
+    if (!entry.code) {
+      return { ...entry, errors };
     }
 
-    [valid, property] = this.validateValues(product);
+    const product = await this.model.getProductByCode(entry.code);
 
-    if (!valid) {
-      return `O campo ${property} não pode ser nulo ou vazio.`;
+    if (!product) {
+      errors.push('Nenhum produto encontrado com o "code" da entrada.');
+      return { ...entry, errors };
     }
+
+    errors.push(...await this.validateProductPrices(product, entry.new_price));
+
+    return { ...product, code: Number(product.code), errors };
   }
 
-  async getAll(): Promise<Product[]> {
-    const products = await this.model.getAll();
+  async getProductsValidation(productsNewData: CSVFileEntry[]): Promise<(Product|CSVFileEntry)[]> {
+    const products = [];
+    for (const entry of productsNewData) {
+      const product = await this.validateProduct(entry);
+      products.push(product);
+    };
     return products;
   }
 
-  async getById(code: number): Promise<Product> {
-    const book = await this.model.getByCode(code);
-    return book;
+  async getProductByCode(code: number): Promise<Product | null> {
+    const product = await this.model.getProductByCode(code);
+    return product && null;
   }
 
-  async update(code: number, product: Product): Promise<void> {
-    const isValidBook = this.validationBook(product);
-    if (typeof isValidBook === 'string') {
-      throw new BadRequestError(isValidBook);
-    }
-
-    const productFound = await this.model.getByCode(code);
-
-    if (!productFound) {
-      throw new NotFoundError('Produto não encontrado!');
-    }
-
-    return this.model.update(code, product);
+  async updateProductPrice(productsNewData: CSVFileEntry[]): Promise<void> {
+    return this.model.updateProductPrice(productsNewData);
   }
 }
 
