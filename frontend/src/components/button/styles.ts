@@ -14,6 +14,11 @@ const ActionButton = styled.button<{ $secondary?: boolean; }>`
   &:hover {
     filter: brightness(var(--hover-brightness));
   }
+
+  &:disabled {
+    opacity: var(--disabled-opacity);
+    cursor: not-allowed;
+  }
 `;
 
 export default ActionButton;

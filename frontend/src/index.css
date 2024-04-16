@@ -8,6 +8,7 @@
   --secondary-color: #002D62;
 
   --hover-brightness: 1.2;
+  --disabled-opacity: 0.7;
 
   font-family: Lato, sans-serif;
   line-height: 1.5;
