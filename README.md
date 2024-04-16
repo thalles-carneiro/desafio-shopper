@@ -14,6 +14,10 @@
 - [restify-errors](https://www.npmjs.com/package/restify-errors)
 - [express-async-errors](https://www.npmjs.com/package/express-async-errors)
 
+### Banco de Dados
+- [MySQL](https://www.mysql.com/)
+- [Prisma ORM](https://www.prisma.io/docs/orm/overview/introduction/what-is-prisma)
+
 ## Boas práticas de commits
 
 - [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
