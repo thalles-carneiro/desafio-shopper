@@ -1,34 +1,35 @@
-import { Pool, ResultSetHeader } from 'mysql2/promise';
+import connection from './connection';
 import Product from '../interfaces/product.interface';
+import { PrismaClient } from '@prisma/client';
+import CSVFileEntry from '../interfaces/csvFile.interface';
 
 class ProductModel {
-  connection: Pool;
+  connection: PrismaClient;
 
-  constructor(connection: Pool) {
+  constructor() {
     this.connection = connection;
   }
 
-  async getAll(): Promise<Product[]> {
-    const result = await this.connection
-      .execute('SELECT * FROM products');
-    const [rows] = result;
-    return rows as Product[];
+  async getProductByCode(code: number | bigint): Promise<Product | null> {
+    const product = await this.connection.products.findFirst({
+      where: { code },
+    });
+    return product;
   }
 
-  async getByCode(code: number): Promise<Product> {
-    const result = await this.connection
-      .execute('SELECT * FROM products WHERE code=?', [code]);
-    const [rows] = result;
-    const [book] = rows as Product[];
-    return book;
-  }
-
-  async update(code: number, product: Product) {
-    const { sales_price } = product;
-    await this.connection.execute(
-      'UPDATE products SET sales_price=? WHERE code=?',
-      [sales_price, code],
-    );
+  async updateProductPrice(productsNewData: CSVFileEntry[]) {
+    productsNewData.forEach(({ code, new_price }) => {
+      return this.connection.$transaction(async (tx) => {
+        await tx.products.update({
+          where: {
+            code,
+          },
+          data: {
+            sales_price: new_price,
+          },
+        });
+      });
+    });
   }
 }
 
