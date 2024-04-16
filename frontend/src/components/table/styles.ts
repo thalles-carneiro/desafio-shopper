@@ -31,6 +31,10 @@ const TableContent = styled.table`
   td {
     color: var(--primary-color);
   }
+
+  td.entry-error {
+    color: var(--alert-color);
+  }
 `;
 
 export default TableContent;

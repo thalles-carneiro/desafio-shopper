@@ -1,8 +1,9 @@
+import { Product } from "../../types";
 import formatPrice from "../../utils/formatPrice";
 import TableContent from "./styles";
 
 type TableProps = {
-  values: string[][],
+  values: Product[],
 };
 
 const columns = ['Código', 'Nome', 'Preço Atual', 'Novo Preço', 'Validação'];
@@ -21,13 +22,19 @@ function Table({ values }: TableProps) {
         </tr>
       </thead>
       <tbody>
-        {values.map(([id, newPrice]: string[]) => (
-          <tr key={ id }>
-            <td>{ id }</td>
-            <td>{ 'Nome do produto' }</td>
-            <td>{ formatPrice('xx.xx') }</td>
-            <td>{ formatPrice(newPrice) }</td>
-            <td>{ 'Tudo certo! ✅' }</td>
+        {values.map(({ code, name, sales_price, new_price, errors }) => (
+          <tr key={ code }>
+            <td>{ code }</td>
+            <td>{ name ? name : '-' }</td>
+            <td>{ sales_price ? formatPrice(+sales_price): '-' }</td>
+            <td>{ new_price ? formatPrice(+new_price) : '-' }</td>
+            <td className={ errors?.length ? 'entry-error' : '' }>
+              {
+                errors?.length === 0
+                  ? 'Tudo certo! ✅'
+                  : errors?.join(' | ')
+              }
+            </td>
           </tr>
         ))}
       </tbody>

@@ -2,9 +2,12 @@ import { useState } from 'react';
 import { useCSVReader } from 'react-papaparse';
 import Button from "../button/button";
 import FormContainer from './styles';
+import { getProductsValidation, updateProductPrice } from '../../services/api';
+import { CSVFileEntry, Product } from '../../types';
 
 type FormProps = {
-  onSetValues: (values: string[][]) => void,
+  values: Product[],
+  onSetValues: (values: Product[]) => void,
   onSetIsLoading: (loading: boolean) => void,
   isUpdating: boolean,
   onSetIsUpdating: (updating: boolean) => void,
@@ -12,43 +15,57 @@ type FormProps = {
 
 function Form(props: FormProps) {
   const {
+    values,
     onSetValues,
     onSetIsLoading,
     isUpdating,
     onSetIsUpdating,
   } = props;
-  const [results, setResults] = useState<string[][] | undefined>();
+  const [results, setResults] = useState<CSVFileEntry[] | undefined>();
   const { CSVReader } = useCSVReader();
 
-  const handleOnUploadAccepted = ({ data }: { data: string[][] }) => {
-    const tableCells = data.filter((_, i) => i !== 0);
-    setResults(tableCells);
+  const resetFormState = () => {
+    onSetValues([]);
+    onSetIsUpdating(false);
   };
 
-  const handleOnSubmitValidate = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleOnUploadAccepted = ({ data }: { data: string[][] }) => {
+    const tableCells = data
+      .filter((_, i) => i !== 0)
+      .map(([product_code, new_price]) => ({
+        code: Number(product_code),
+        new_price: Number(new_price),
+      }));
+    setResults(tableCells);
+    resetFormState();
+  };
+
+  const handleOnSubmitValidate = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (results) {
       onSetIsLoading(true);
-      onSetValues(results);
-      setTimeout(() => {
-        onSetIsLoading(false);
-        onSetIsUpdating(true);
-      }, 2000);
+      const products = await getProductsValidation(results);
+      const values = products.map((product: Product, index: number) => (
+        {...product, new_price: results[index].new_price }
+      ));
+      onSetValues(values);
+      onSetIsLoading(false);
+      onSetIsUpdating(true);
     }
   };
 
-  const handleOnSubmitUpdate = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleOnSubmitUpdate = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onSetIsLoading(true);
-    onSetValues([]);
-    setResults(undefined);
-
-    setTimeout(() => {
-      onSetIsLoading(false);
-      onSetIsUpdating(false);
+    if (results) {
+      await updateProductPrice(results);
+  
+      resetFormState();
+      setResults(undefined);
       const acceptedFile = document.querySelector('.acceptedFile') as HTMLElement;
       acceptedFile.textContent = '';
-    }, 2000);
+    }
+    onSetIsLoading(false);
   };
 
   return (
@@ -86,6 +103,7 @@ function Form(props: FormProps) {
       </CSVReader>
       <Button
         update={ isUpdating }
+        values={ values }
       >
         { isUpdating ? 'Atualizar' : 'Validar' }
       </Button>

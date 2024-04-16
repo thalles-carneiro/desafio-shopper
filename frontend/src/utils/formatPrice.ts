@@ -1,6 +1,6 @@
-const formatPrice = (price: string) => {
+const formatPrice = (price: number) => {
   let newFormattedPrice = '';
-  newFormattedPrice = price.replace('.', ',');
+  newFormattedPrice = (price).toFixed(2).replace('.', ',');
   newFormattedPrice = `R$ ${newFormattedPrice}`;
   return newFormattedPrice;
 }
