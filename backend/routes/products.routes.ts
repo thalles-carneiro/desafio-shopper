@@ -7,7 +7,7 @@ const productsController = new ProductsController();
 
 router
   .route('/products')
-  .get(productsController.getAll)
-  .put(productsController.update);
+  .post(productsController.getProductsValidation)
+  .put(productsController.updateProductPrice);
 
 export default router;
