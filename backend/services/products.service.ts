@@ -1,6 +1,7 @@
 import ProductModel from '../models/product.model';
 import Product from '../interfaces/product.interface';
 import CSVFileEntry from '../interfaces/csvFile.interface';
+import Pack from '../interfaces/pack.interface';
 
 class ProductService {
   model: ProductModel;
@@ -43,7 +44,46 @@ class ProductService {
     return errors;
   }
 
-  async validateProduct(entry: CSVFileEntry): Promise<Product|CSVFileEntry> {
+  async validatePack(packEntries: Pack[], productsNewData: CSVFileEntry[]): Promise<string[]> {
+    const errors: string[] = [];
+
+    const packId = packEntries[0].pack_id;
+    const packEntryInCSVFile = productsNewData.find(({ code }) => code === Number(packId));
+
+    const productsInPackIds = packEntries
+      .map(({ product_id }) => product_id);
+    const productsInPack = [];
+    for (const code of productsInPackIds) {
+      const product = await this.model.getProductByCode(code);
+      productsInPack.push(product);
+    }
+
+    let totalProductsInPackNewPrice = 0;
+    let matchingProductsInCSVFile = [];
+    for (const productInDB of productsInPack) {
+      const matchingProductInCSVFile = productsNewData.find(({ code }) => code === Number(productInDB?.code));
+      const matchingPackEntry = packEntries.find(({ product_id }) => Number(product_id) === Number(productInDB?.code));
+      matchingProductsInCSVFile.push(matchingProductInCSVFile);
+
+      const price = matchingProductInCSVFile
+        ? Number(matchingProductInCSVFile.new_price)
+        : Number(productInDB?.sales_price);
+      totalProductsInPackNewPrice += price * Number(matchingPackEntry?.qty);
+    }
+
+    if (!matchingProductsInCSVFile.some((value) => value)) {
+      errors.push('Não há nenhum produto associado ao pacote no arquivo.');
+      return errors;
+    }
+
+    if (packEntryInCSVFile?.new_price !== Number(totalProductsInPackNewPrice.toFixed(2))) {
+      errors.push('O novo preço do pacote não corresponde ao preço dos produtos unitários.');
+    }
+
+    return errors;
+  }
+
+  async validateProduct(entry: CSVFileEntry, productsNewData: CSVFileEntry[]): Promise<Product|CSVFileEntry> {
     const errors: string[] = [];
 
     errors.push(...await this.validateEntryFields(entry));
@@ -59,7 +99,12 @@ class ProductService {
       return { ...entry, errors };
     }
 
-    errors.push(...await this.validateProductPrices(product, entry.new_price));
+    const packEntries = await this.model.getPackEntriesByCode(product.code);
+    if (packEntries) {
+      errors.push(...await this.validatePack(packEntries, productsNewData));
+    } else {
+      errors.push(...await this.validateProductPrices(product, entry.new_price));
+    }
 
     return { ...product, code: Number(product.code), errors };
   }
@@ -67,7 +112,7 @@ class ProductService {
   async getProductsValidation(productsNewData: CSVFileEntry[]): Promise<(Product|CSVFileEntry)[]> {
     const products = [];
     for (const entry of productsNewData) {
-      const product = await this.validateProduct(entry);
+      const product = await this.validateProduct(entry, productsNewData);
       products.push(product);
     };
     return products;

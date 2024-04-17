@@ -1,8 +1,8 @@
 interface Pack {
-  id: number;
-  pack_id: number;
-  product_id: number;
-  qty: number;
+  id: bigint;
+  pack_id: bigint;
+  product_id: bigint;
+  qty: bigint;
 }
 
 export default Pack;
