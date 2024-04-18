@@ -1,4 +1,4 @@
-import shopperLogo from '../../assets/shopper.svg';
+import shopperLogo from '../../assets/logo-shopper.svg';
 import FooterContainer from './styles';
 
 function Footer() {

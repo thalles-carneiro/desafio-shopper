@@ -1,4 +1,4 @@
-import shopperLogo from '../../assets/shopper.svg';
+import shopperLogo from '../../assets/logo-shopper.svg';
 import HeaderLogo from './styles';
 
 function Header() {
