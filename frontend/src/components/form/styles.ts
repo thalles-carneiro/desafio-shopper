@@ -8,16 +8,15 @@ const FormContainer = styled.form`
   justify-content: center;
   padding: 2rem;
   margin: 0 auto;
-  width: 60%;
+  width: 50%;
 
   div.csvReader {
     border: 1px solid var(--border-base-color);
     color: var(--primary-color);
     display: flex;
-    height: 2rem;
-    width: 60%
+    width: 80%;
   }
-  
+
   button.browseFile {
     align-self: center;
     background: none;
@@ -25,11 +24,15 @@ const FormContainer = styled.form`
     color: var(--secondary-color);
     font-size: 1.125rem;
     height: 100%;
+    padding: 0.5rem;
     width: 40%;
   }
 
   p.acceptedFile {
     align-self: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     width: 60%;
   }
 `;

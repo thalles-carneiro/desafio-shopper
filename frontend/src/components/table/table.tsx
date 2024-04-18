@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { Product } from "../../types";
 import formatPrice from "../../utils/formatPrice";
 import TableContent from "./styles";
@@ -9,6 +10,16 @@ type TableProps = {
 const columns = ['Código', 'Nome', 'Preço Atual', 'Novo Preço', 'Validação'];
 
 function Table({ values }: TableProps) {
+  const handleClick = (errors: string[]) => {
+    Swal.fire({
+      icon: "error",
+      title: "Regras de negócio falhando:",
+      html: errors.reduce((acc, error, index) => acc.concat(
+        `<p class="error-messages">${index + 1} - ${error}</p>`
+      ), ''),
+    });
+  }
+
   return (
     <TableContent>
       <thead>
@@ -28,13 +39,18 @@ function Table({ values }: TableProps) {
             <td>{ name ? name : '-' }</td>
             <td>{ sales_price ? formatPrice(+sales_price): '-' }</td>
             <td>{ new_price ? formatPrice(+new_price) : '-' }</td>
-            <td className={ errors?.length ? 'entry-error' : '' }>
-              {
-                errors?.length === 0
-                  ? 'Tudo certo! ✅'
-                  : errors?.join(' | ')
-              }
-            </td>
+            {
+              errors?.length === 0
+                ? <td>✅</td>
+                : (
+                  <td
+                    className='entry-error'
+                    onClick={ () => handleClick(errors || []) }
+                  >
+                    { `Erros [${errors?.length}]` }
+                  </td>
+                )
+            }
           </tr>
         ))}
       </tbody>

@@ -7,20 +7,32 @@ const TableContent = styled.table`
   font-size: 1rem;
   margin: 0 auto;
 
-  td,th {
+  thead {
+    position: sticky;
+    top: 0;
+  }
+
+  thead > tr {
+    scroll-snap-align: end;
+  }
+
+  tbody > tr {
+    scroll-snap-align: start;
+  }
+
+  td,th, button {
     border: 1px solid var(--border-base-color);
     padding: 0.5rem;
   }
 
-  // Set border-radius on the top-left and bottom-left of the first table data on the table row
   td:first-child,
   th:first-child {
     border-radius: 10px 0 0 10px;
   }
 
-  // Set border-radius on the top-right and bottom-right of the last table data on the table row
   td:last-child,
-  th:last-child {
+  th:last-child,
+  button {
     border-radius: 0 10px 10px 0;
   }
 
@@ -33,7 +45,14 @@ const TableContent = styled.table`
   }
 
   td.entry-error {
-    color: var(--alert-color);
+    background-color: var(--alert-color);
+    color: var(--main-base-color);
+    cursor: pointer;
+    opacity: var(--disabled-opacity);
+  }
+
+  td.entry-error:hover {
+    opacity: 1;
   }
 `;
 

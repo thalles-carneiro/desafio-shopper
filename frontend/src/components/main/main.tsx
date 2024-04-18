@@ -19,11 +19,13 @@ function Main() {
         isUpdating={ isUpdating }
         onSetIsUpdating={ setIsUpdating }
       />
-      {
-        isLoading
-          ? <Loading />
-          : <Table values={ values } />
-      }
+      <section>
+        {
+          isLoading
+            ? <Loading />
+            : <Table values={ values } />
+        }
+      </section>
     </MainContainer>
   );
 }

@@ -4,8 +4,9 @@ const LoadingContainer = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 40%;
-  justify-content: space-evenly;
+  gap: 2rem;
+  height: 100%;
+  justify-content: center;
 
   img._splash-screen-logo {
     height: 8rem;

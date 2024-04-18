@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useCSVReader } from 'react-papaparse';
+import Swal from 'sweetalert2';
 import Button from "../button/button";
 import FormContainer from './styles';
 import { getProductsValidation, updateProductPrice } from '../../services/api';
@@ -64,6 +65,11 @@ function Form(props: FormProps) {
       setResults(undefined);
       const acceptedFile = document.querySelector('.acceptedFile') as HTMLElement;
       acceptedFile.textContent = '';
+      Swal.fire({
+        icon: "success",
+        title: "Banco de dados atualizado!",
+        text: "Os novos preços dos produtos já estão em vigor.",
+      });
     }
     onSetIsLoading(false);
   };

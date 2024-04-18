@@ -9,3 +9,12 @@
   margin: 0 auto;
   text-align: center;
 }
+
+p.error-messages {
+  color: var(--alert-color);
+}
+
+button.swal2-confirm.swal2-styled {
+  background-color: var(--primary-color);
+  box-shadow: none;
+}
