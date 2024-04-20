@@ -1,4 +1,4 @@
-import ProductModel from '../models/product.model';
+import ProductModel from '../models/products.model';
 import Product from '../interfaces/product.interface';
 import CSVFileEntry from '../interfaces/csvFile.interface';
 import Pack from '../interfaces/pack.interface';
@@ -97,6 +97,15 @@ class ProductService {
     if (!product) {
       errors.push('Nenhum produto encontrado com o "code" da entrada.');
       return { ...entry, errors };
+    }
+
+    const packOfProduct = await this.model.getPackByProductCode(product.code);
+    if (packOfProduct) {
+      const packEntryInCSVFile = productsNewData.find(({ code }) => code === Number(packOfProduct.pack_id));
+      if (!packEntryInCSVFile) {
+        errors.push('Não há nenhum pacote associado ao produto no arquivo.');
+        return { ...product, code: Number(product.code), errors }
+      }
     }
 
     const packEntries = await this.model.getPackEntriesByCode(product.code);

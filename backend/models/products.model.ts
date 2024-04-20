@@ -18,6 +18,13 @@ class ProductModel {
     return packEntries.length ? packEntries : null;
   }
 
+  async getPackByProductCode(code: number | bigint): Promise<Pack | null> {
+    const pack = await this.connection.packs.findFirst({
+      where: { product_id: code },
+    });
+    return pack;
+  }
+
   async getProductByCode(code: number | bigint): Promise<Product | null> {
     const product = await this.connection.products.findFirst({
       where: { code },
@@ -27,7 +34,7 @@ class ProductModel {
 
   async updateProductPrice(productsNewData: CSVFileEntry[]) {
     productsNewData.forEach(({ code, new_price }) => {
-      return this.connection.$transaction(async (tx) => {
+      return this.connection.$transaction(async (tx: any) => {
         await tx.products.update({
           where: {
             code,
