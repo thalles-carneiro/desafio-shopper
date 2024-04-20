@@ -18,6 +18,13 @@
 - [MySQL](https://www.mysql.com/)
 - [Prisma ORM](https://www.prisma.io/docs/orm/overview/introduction/what-is-prisma)
 
-## Boas práticas de commits
+### Testes
+- [Jest](https://jestjs.io/pt-BR/)
+- [Supertest](https://www.npmjs.com/package/supertest)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+
+### Boas práticas
 
 - [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+- [ESLint](https://eslint.org/)
+- [Stylelint](https://stylelint.io/)
