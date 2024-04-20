@@ -1,13 +1,12 @@
-import { Product } from "../../types";
-import ActionButton from "./styles";
+import { Product } from '../../types';
+import ActionButton from './styles';
 
 type ButtonProps = {
-  children: string,
   update?: boolean,
   values: Product[],
 };
 
-function Button({ children, update, values }: ButtonProps) {
+function Button({ update = false, values }: ButtonProps) {
   const isDisabled = update
     ? values.some(({ errors }) => errors?.length)
     : false;
@@ -18,7 +17,7 @@ function Button({ children, update, values }: ButtonProps) {
       disabled={ isDisabled }
       $secondary={ update }
     >
-      { children }
+      { update ? 'Atualizar' : 'Validar' }
     </ActionButton>
   );
 }

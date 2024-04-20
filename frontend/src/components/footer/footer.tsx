@@ -11,7 +11,13 @@ function Footer() {
       />
       <p>
         <span>Desafio técnico feito por </span>
-        <a href='https://www.linkedin.com/in/thallescarneiro/' target="_blank">Thalles Carneiro</a>
+        <a
+          href="https://www.linkedin.com/in/thallescarneiro/"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Thalles Carneiro
+        </a>
       </p>
     </FooterContainer>
   );

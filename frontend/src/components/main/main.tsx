@@ -1,9 +1,9 @@
-import { useState } from "react";
-import Form from "../form/form";
-import Table from "../table/table";
-import MainContainer from "./styles";
-import Loading from "../loading/loading";
-import { Product } from "../../types";
+import { useState } from 'react';
+import Form from '../form/form';
+import Table from '../table/table';
+import MainContainer from './styles';
+import Loading from '../loading/loading';
+import { Product } from '../../types';
 
 function Main() {
   const [values, setValues] = useState<Product[]>([]);
@@ -19,13 +19,11 @@ function Main() {
         isUpdating={ isUpdating }
         onSetIsUpdating={ setIsUpdating }
       />
-      <section>
-        {
-          isLoading
-            ? <Loading />
-            : <Table values={ values } />
-        }
-      </section>
+      { (isLoading) && <section><Loading /></section> }
+      {
+        (values.length > 0 && !isLoading)
+        && <section><Table values={ values } /></section>
+      }
     </MainContainer>
   );
 }

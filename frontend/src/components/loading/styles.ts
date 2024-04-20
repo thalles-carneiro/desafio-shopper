@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const LoadingContainer = styled.div`
   align-items: center;
@@ -8,27 +8,24 @@ const LoadingContainer = styled.div`
   height: 100%;
   justify-content: center;
 
-  img._splash-screen-logo {
+  img.splash-screen-logo {
     height: 8rem;
     width: 8rem;
   }
 
-  div._splash-screen-loader {
+  div.splash-screen-loader {
     width: 16rem;
     margin: 0 auto;
     border-radius: 20px;
     position: relative;
     border: 2px solid var(--primary-color);
-    padding: 10px 0px;
+    padding: 10px 0;
   }
 
-  div._splash-screen-loader-bar {
+  div.splash-screen-loader-bar {
     position: absolute;
     border-radius: 50px;
-    top: 0;
-    right: 100%;
-    bottom: 0;
-    left: 0;
+    inset: 0 100% 0 0;
     background: #2da77a;
     width: 0;
     animation: borealis-bar 2s linear infinite;

@@ -8,7 +8,7 @@ function App() {
       <Main />
       <Footer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

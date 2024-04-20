@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const TableContent = styled.table`
   border-collapse: separate;
@@ -10,6 +10,7 @@ const TableContent = styled.table`
   thead {
     position: sticky;
     top: 0;
+    z-index: 1;
   }
 
   thead > tr {
@@ -25,6 +26,14 @@ const TableContent = styled.table`
     padding: 0.5rem;
   }
 
+  th {
+    background-color: var(--primary-color);
+  }
+
+  td {
+    color: var(--primary-color);
+  }
+
   td:first-child,
   th:first-child {
     border-radius: 10px 0 0 10px;
@@ -36,13 +45,6 @@ const TableContent = styled.table`
     border-radius: 0 10px 10px 0;
   }
 
-  th {
-    background-color: var(--primary-color);
-  }
-
-  td {
-    color: var(--primary-color);
-  }
 
   td.entry-error {
     background-color: var(--alert-color);

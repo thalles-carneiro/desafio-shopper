@@ -1,6 +1,6 @@
-import { CSVFileEntry } from "../types";
+import { Product } from '../types';
 
-export const getProductsValidation = async (entries: CSVFileEntry[]) => {
+export const getProductsValidation = async (entries: Product[]) => {
   const response = await fetch('http://localhost:8000/products', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -10,7 +10,7 @@ export const getProductsValidation = async (entries: CSVFileEntry[]) => {
   return products;
 };
 
-export const updateProductPrice = async (entries: CSVFileEntry[]) => {
+export const updateProductPrice = async (entries: Product[]) => {
   await fetch('http://localhost:8000/products', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
