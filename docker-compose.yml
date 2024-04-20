@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  web:
+    depends_on:
+      - api
+    build: ./frontend
+    ports:
+      - 5173:5173
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    develop:
+      watch:
+        - path: ./frontend/package.json
+          action: rebuild
+        - path: ./frontend/package-lock.json
+          action: rebuild
+        - path: ./frontend
+          target: /app
+          action: sync
+
+  api:
+    depends_on:
+      - db
+    build: ./backend
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    develop:
+      watch:
+        - path: ./backend/package.json
+          action: rebuild
+        - path: ./backend/package-lock.json
+          action: rebuild
+        - path: ./backend
+          target: /app
+          action: sync
+
+  db:
+    image: mysql:8.3.0
+    ports:
+      - 3307:3306
+    restart: always
+    command: --default-authentication-plugin=caching_sha2_password
+    environment:
+      MYSQL_ROOT_PASSWORD: L15n53a!T
+    volumes:
+      - mysql:/var/lib/mysql
+
+volumes:
+  mysql:
