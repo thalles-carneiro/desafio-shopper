@@ -1,23 +1,12 @@
 import styled from 'styled-components';
 
-const FormContainer = styled.form`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  justify-content: center;
-  padding: 2rem;
-  margin: 0 auto;
-  width: 50%;
-
-  div.csv-reader {
+const InputContainer = styled.div`
     border: 1px solid var(--border-base-color);
     color: var(--primary-color);
     display: flex;
     width: 80%;
-  }
 
-  button.browse-file {
+  label.browse-file {
     align-self: center;
     background: none;
     border: inherit;
@@ -26,6 +15,10 @@ const FormContainer = styled.form`
     height: 100%;
     padding: 0.5rem;
     width: 40%;
+  }
+
+  input {
+    display: none;
   }
 
   p.accepted-file {
@@ -37,4 +30,4 @@ const FormContainer = styled.form`
   }
 `;
 
-export default FormContainer;
+export default InputContainer;

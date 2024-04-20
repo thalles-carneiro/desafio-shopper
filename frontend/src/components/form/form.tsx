@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useCSVReader } from 'react-papaparse';
+import { usePapaParse } from 'react-papaparse';
 import Swal from 'sweetalert2';
-import Button from "../button/button";
+import Button from '../button/button';
 import FormContainer from './styles';
 import { getProductsValidation, updateProductPrice } from '../../services/api';
-import { CSVFileEntry, Product } from '../../types';
+import { Product } from '../../types';
+import Input from '../input/input';
 
 type FormProps = {
   values: Product[],
@@ -22,22 +23,30 @@ function Form(props: FormProps) {
     isUpdating,
     onSetIsUpdating,
   } = props;
-  const [results, setResults] = useState<CSVFileEntry[] | undefined>();
-  const { CSVReader } = useCSVReader();
+  const [results, setResults] = useState<Product[] | undefined>();
+  const [fileName, setFileName] = useState('');
+
+  const { readString } = usePapaParse();
 
   const resetFormState = () => {
     onSetValues([]);
     onSetIsUpdating(false);
   };
 
-  const handleOnUploadAccepted = ({ data }: { data: string[][] }) => {
-    const tableCells = data
-      .filter((_, i) => i !== 0)
-      .map(([product_code, new_price]) => ({
-        code: Number(product_code),
-        new_price: Number(new_price),
-      }));
-    setResults(tableCells);
+  const handleUpload = (value: string) => {
+    readString(value, {
+      worker: true,
+      complete: ({ data }) => {
+        const onlyValues = data.filter((_, i) => i !== 0);
+        const tableCells = onlyValues.map((entry) => {
+          const [productCode, newPrice] = entry as string[];
+          const csvEntry = { code: Number(productCode), new_price: Number(newPrice) };
+          return csvEntry;
+        });
+        setResults(tableCells);
+      },
+    });
+
     resetFormState();
   };
 
@@ -46,10 +55,10 @@ function Form(props: FormProps) {
     if (results) {
       onSetIsLoading(true);
       const products = await getProductsValidation(results);
-      const values = products.map((product: Product, index: number) => (
-        {...product, new_price: results[index].new_price }
+      const valuesMapped = products.map((product: Product, index: number) => (
+        { ...product, new_price: results[index].new_price }
       ));
-      onSetValues(values);
+      onSetValues(valuesMapped);
       onSetIsLoading(false);
       onSetIsUpdating(true);
     }
@@ -60,15 +69,13 @@ function Form(props: FormProps) {
     onSetIsLoading(true);
     if (results) {
       await updateProductPrice(results);
-  
+      setFileName('');
       resetFormState();
       setResults(undefined);
-      const acceptedFile = document.querySelector('.acceptedFile') as HTMLElement;
-      acceptedFile.textContent = '';
       Swal.fire({
-        icon: "success",
-        title: "Banco de dados atualizado!",
-        text: "Os novos preços dos produtos já estão em vigor.",
+        icon: 'success',
+        title: 'Banco de dados atualizado!',
+        text: 'Os novos preços dos produtos já estão em vigor.',
       });
     }
     onSetIsLoading(false);
@@ -82,37 +89,12 @@ function Form(props: FormProps) {
           : handleOnSubmitValidate
       }
     >
-      <CSVReader
-        onUploadAccepted={ handleOnUploadAccepted }
-        config={{ worker: true }}
-        noDrag
-      >
-        {({
-          getRootProps,
-          acceptedFile,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        }: any) => (
-            <div className='csvReader'>
-              <button
-                className='browseFile'
-                type='button'
-                {...getRootProps()}
-              >
-                Escolha o arquivo
-              </button>
-              <p className='acceptedFile'>
-                {acceptedFile && acceptedFile.name}
-              </p>
-            </div>
-          )
-        }
-      </CSVReader>
-      <Button
-        update={ isUpdating }
-        values={ values }
-      >
-        { isUpdating ? 'Atualizar' : 'Validar' }
-      </Button>
+      <Input
+        onHandleUpload={ handleUpload }
+        fileName={ fileName }
+        onSetFileName={ setFileName }
+      />
+      <Button update={ isUpdating } values={ values } />
     </FormContainer>
   );
 }
