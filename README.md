@@ -82,9 +82,17 @@ A ferramenta desenvolvida visa facilitar a atualização de preços, mantendo a 
   mv backend/.env.example backend/.env
   ```
 
-*⚠️ Lembre-se de alterar as informações no arquivo .env para as configuradas na sua máquina.*
+  *⚠️ Lembre-se de alterar as informações no arquivo .env para as configurações na sua máquina.*
+
+  - Onde está `<NOME DE USUÁRIO DO BANCO>` substitua pelo nome de usuário do banco de dados, geralmente será o **`root`**.
+
+  - Onde está `<SENHA DE ACESSO DO BANCO>` substitua dependendo do comando que irá executar para subir a aplicação, caso utilize `npm run start` deve usar a senha que está configurada para o uso do MySQL, já ao rodar o comando `npm run compose:up` pode usar algo padrão como **`my-secret-pw`**.
+
+  - Onde está `<HOST DO BANCO DE DADOS>` substitua dependendo do comando que irá executar para subir a aplicação, caso utilize `npm run start` deve usar **`localhost`**, já ao rodar o comando `npm run compose:up` deve usar **`db`**.
 
 4. **Inicie a aplicação usando o Docker:**
+
+  *O Docker deve estar iniciado na máquina para funcionar o comando abaixo:*
   ```bash
   npm run compose:up
   ```
