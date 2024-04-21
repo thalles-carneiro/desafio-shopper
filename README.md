@@ -1,7 +1,6 @@
 # Desafio Técnico - [Shooper](https://landing.shopper.com.br/)
 
 ## Índice
-
 - [Desafio Técnico - Shooper](#desafio-técnico---shooper)
   - [Índice](#índice)
   - [Contexto](#contexto)
@@ -63,8 +62,8 @@ A ferramenta desenvolvida visa facilitar a atualização de preços, mantendo a 
 ### Requisitos para rodar o projeto
 
 - **Node.js:** Versão mínima `v18.19.0`. [Instalação do Node.js](https://nodejs.org/en).
-- **Docker:** [Instalação do Docker](https://docs.docker.com/engine/install/)
-- **Docker Compose:** [Instalação do Docker Compose](https://docs.docker.com/compose/install/)
+- **Docker:** [Instalação do Docker](https://docs.docker.com/engine/install/).
+- **Docker Compose:** [Instalação do Docker Compose](https://docs.docker.com/compose/install/).
 
 ### Executando o projeto localmente
 
