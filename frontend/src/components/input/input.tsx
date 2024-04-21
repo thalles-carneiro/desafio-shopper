@@ -18,8 +18,10 @@ function Input({ onHandleUpload, fileName, onSetFileName }: InputProps) {
       };
       reader.readAsText(file);
     } catch (_) {
-      onSetFileName('');
-      onHandleUpload('');
+      // Caso após clicar para adicionar um arquivo nenhuma seja selecionado, um erro é disparado
+      // Nada é feito aqui, para manter o usuário com tudo carregado, mas ao descomentar as linhas abaixo é possível zerar o que já carregou
+      // onSetFileName('');
+      // onHandleUpload('');
     }
   };
 
