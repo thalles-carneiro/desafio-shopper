@@ -44,8 +44,8 @@ services:
       - 3307:3306
     restart: always
     command: --default-authentication-plugin=caching_sha2_password
-    environment:
-      MYSQL_ROOT_PASSWORD: L15n53a!T
+    env_file:
+      - path: ./backend/.env
     volumes:
       - mysql:/var/lib/mysql
 
