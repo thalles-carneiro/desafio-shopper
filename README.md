@@ -64,6 +64,7 @@ A ferramenta desenvolvida visa facilitar a atualização de preços, mantendo a 
 - **Node.js:** Versão mínima `v18.19.0`. [Instalação do Node.js](https://nodejs.org/en).
 - **Docker:** [Instalação do Docker](https://docs.docker.com/engine/install/).
 - **Docker Compose:** [Instalação do Docker Compose](https://docs.docker.com/compose/install/).
+- **MySQL:** Versão `8`, será nessecário ter instalado caso não utilize o Docker. [Instalação do MySQL](https://dev.mysql.com/downloads/mysql/).
 
 ### Executando o projeto localmente
 
@@ -84,7 +85,7 @@ A ferramenta desenvolvida visa facilitar a atualização de preços, mantendo a 
 
 4. **Renomeie o arquivo `backend/.env.example` para `backend/.env` apenas:**
   ```bash
-  mv backend/.env.example backend/.env
+  mv backend/.env-example backend/.env
   ```
 
   *⚠️ Lembre-se de alterar as informações no arquivo .env para as configurações na sua máquina.*
@@ -109,7 +110,7 @@ A ferramenta desenvolvida visa facilitar a atualização de preços, mantendo a 
 
 6. **Acesse a aplicação:**
   ```bash
-    http://localhost:5173
+  http://localhost:5173
   ```
 
 ## Testes e Linters
