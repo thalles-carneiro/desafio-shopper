@@ -13,7 +13,7 @@
     "setupFilesAfterEnv": ["<rootDir>/tests/mocks/prisma.ts"]
   },
   "scripts": {
-    "start": "npm run build && node ./dist/index.js",
+    "start": "npx prisma migrate dev && npm run build && node ./dist/index.js",
     "dev": "npx prisma migrate dev && tsnd index.ts",
     "build": "tsc",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json .",
