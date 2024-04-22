@@ -20,7 +20,7 @@
 
 ## Contexto
 
-Dada a necessidade em empresas de e-commerce de uma ferramenta uma ferramenta para atualização massiva de preços que mantenha a integridade das regras de negócio.
+Dada a necessidade em empresas de e-commerce de uma ferramenta para atualização massiva de preços que mantenha a integridade das regras de negócio.
 
 Surge então, a ideia de utilizar um arquivo CSV com os ajustes de preços e uma aplicação para validação de preços mínimos e reajustes dentro de limites específicos, estabelecendo a necessidade de atualização de preços em pacotes de produtos, garantindo que os reajustes sejam refletidos nos componentes do pacote de forma coerente.
 
