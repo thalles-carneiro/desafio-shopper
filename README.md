@@ -70,7 +70,7 @@ A ferramenta desenvolvida visa facilitar a atualização de preços, mantendo a 
 
 1. **Clone o repositório:**
   ```bash
-  git@github.com:thalles-carneiro/desafio-shopper.git
+  git clone git@github.com:thalles-carneiro/desafio-shopper.git
   ```
 
 2. **Navegue até o repositório do projeto:**
