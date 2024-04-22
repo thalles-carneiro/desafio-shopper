@@ -77,7 +77,12 @@ A ferramenta desenvolvida visa facilitar a atualização de preços, mantendo a 
   cd desafio-shopper
   ```
 
-3. **Renomeie o arquivo `backend/.env.example` para `backend/.env` apenas:**
+3. **Instale as dependências:**
+  ```bash
+  npm install
+  ```
+
+4. **Renomeie o arquivo `backend/.env.example` para `backend/.env` apenas:**
   ```bash
   mv backend/.env.example backend/.env
   ```
@@ -90,7 +95,7 @@ A ferramenta desenvolvida visa facilitar a atualização de preços, mantendo a 
 
   - Onde está `<HOST DO BANCO DE DADOS>` substitua dependendo do comando que irá executar para subir a aplicação, caso utilize `npm run start` deve usar **`localhost`**, já ao rodar o comando `npm run compose:up` deve usar **`db`**.
 
-4. **Inicie a aplicação usando o Docker:**
+5. **Inicie a aplicação usando o Docker:**
 
   *O Docker deve estar iniciado na máquina para funcionar o comando abaixo:*
   ```bash
@@ -102,7 +107,7 @@ A ferramenta desenvolvida visa facilitar a atualização de preços, mantendo a 
   npm run start
   ```
 
-5. **Acesse a aplicação:**
+6. **Acesse a aplicação:**
   ```bash
     http://localhost:5173
   ```
