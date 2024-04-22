@@ -112,7 +112,7 @@ class ProductService {
     if (packEntries) {
       errors.push(...await this.validatePack(packEntries, productsNewData));
     } else {
-      errors.push(...await this.validateProductPrices(product, entry.new_price));
+      errors.push(...await this.validateProductPrices(product, entry.new_price as number));
     }
 
     return { ...product, code: Number(product.code), errors };
@@ -129,7 +129,7 @@ class ProductService {
 
   async getProductByCode(code: number): Promise<Product | null> {
     const product = await this.model.getProductByCode(code);
-    return product && null;
+    return product;
   }
 
   async updateProductPrice(productsNewData: CSVFileEntry[]): Promise<void> {
