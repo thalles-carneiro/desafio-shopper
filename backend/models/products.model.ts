@@ -33,18 +33,16 @@ class ProductModel {
   }
 
   async updateProductPrice(productsNewData: CSVFileEntry[]) {
-    productsNewData.forEach(({ code, new_price }) => {
-      return this.connection.$transaction(async (tx: any) => {
-        await tx.products.update({
-          where: {
-            code,
-          },
-          data: {
-            sales_price: new_price,
-          },
-        });
+    for (const { code, new_price } of productsNewData) {
+      await this.connection.products.update({
+        where: {
+          code,
+        },
+        data: {
+          sales_price: new_price,
+        },
       });
-    });
+    }
   }
 }
 
